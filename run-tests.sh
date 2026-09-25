@@ -14,6 +14,16 @@ fail=0
 pass() { echo "PASS: $*"; }
 bad()  { echo "FAIL: $*"; fail=1; }
 
+echo "== dependency check =="
+if ! python3 -c "import flask, numpy" 2>/dev/null; then
+  echo "FAIL: Python deps missing. Install them first:"
+  echo "        python3 -m pip install -r requirements.txt"
+  echo "      If pip is refused (externally-managed), use a venv:"
+  echo "        python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
+  exit 1
+fi
+pass "python deps present (flask, numpy)"
+
 echo "== shell syntax =="
 for s in *.sh; do bash -n "$s" && pass "bash -n $s" || bad "bash -n $s"; done
 

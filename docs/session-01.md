@@ -11,14 +11,25 @@ Raspberry Pis needed. About **60–90 minutes**.
 
 ## Before you start
 
+You need **Python 3** and **curl** (both are usually already installed). `nmap`
+is *optional* — Part 1 gives a `curl` fallback if you don't have it.
+
+Install the Python deps and run the self-test:
 ```bash
 cd pi-hacking-system
-pip install -r requirements.txt
-./run-tests.sh          # should print ALL TESTS PASSED
+python3 -m pip install -r requirements.txt
+./run-tests.sh          # should end with: ALL TESTS PASSED
 ```
 
-You'll want **two terminals**: one to run the target, one to attack it. Install
-`nmap` if you don't have it (`sudo apt install nmap`, or `brew install nmap`).
+**If `pip install` is refused** with "externally-managed-environment" (common on
+Linux/macOS), use a virtual environment:
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+python3 -m pip install -r requirements.txt
+```
+(then run everything below inside that activated venv).
+
+You'll want **two terminals**: one to run the target, one to attack it.
 
 ---
 
@@ -28,20 +39,33 @@ You'll want **two terminals**: one to run the target, one to attack it. Install
 ```bash
 python3 mock_robot.py
 ```
-It prints `Mode: INSECURE (no auth)` and its URLs.
+It prints `Mode: INSECURE (no auth)` and its URLs. Leave it running.
 
-**Terminal B** — discover it and its open port:
+**Terminal B** — confirm the target is alive and find its open port.
+
+Everyone has `curl`, so start with this — a reply means the service is up:
 ```bash
-nmap -sV -p 9000 127.0.0.1
+curl -s http://127.0.0.1:9000/ && echo "  <- target is up on port 9000"
 ```
-✅ **Expected:** port `9000/tcp open`. That's the target's control service.
-📝 **Record:** the nmap output. This is "an attacker sees the device announce itself."
+
+Want the real port-scanner view? Use `nmap` if you have it (optional):
+```bash
+nmap -sV -p 9000 127.0.0.1          # if "command not found": skip it, or install nmap
+```
+- Install nmap later if you like: `sudo apt install nmap` (Linux) · `brew install nmap` (macOS) · [nmap.org/download](https://nmap.org/download.html) (Windows).
+
+No nmap? You can still list the listening port with a built-in tool:
+```bash
+ss -tlnp 2>/dev/null | grep 9000 || netstat -an | grep 9000
+```
+✅ **Expected:** something shows port `9000` listening.
+📝 **Record:** the output. This is "an attacker sees the device announce itself."
 
 ---
 
 ## Part 2 — Intercept (watch with no login)
 
-In a browser (or Terminal B), open the camera feed:
+Open the camera feed — in a browser go to `http://127.0.0.1:9000/mjpg`, or:
 ```bash
 curl http://127.0.0.1:9000/mjpg
 ```
@@ -58,7 +82,7 @@ curl "http://127.0.0.1:9000/cmd?move=forward"
 ```
 ✅ **Expected:** `{"auth_checked": false, "move": "forward", "ok": true}`, and Terminal A logs `command accepted (auth=NO)`.
 
-Now **replay** it a few times (up, down arrow, run again). Each one is accepted.
+Now **replay** it a few times (press up-arrow, Enter, repeat). Each one is accepted.
 That's the attack: a captured request, replayed, controls the device.
 📝 **Record:** Terminal A's log showing the commands piling up. This is **exposed, unauthenticated control**.
 
@@ -102,6 +126,16 @@ curl "http://127.0.0.1:9000/cmd?move=forward&token=s3cr3t"
 
 One 90-minute session covers three of the top IoT weaknesses **and** their
 fixes — the exact story the report and the deck tell.
+
+## If something doesn't work
+
+- `./run-tests.sh` fails at the demos → the deps aren't installed; run the
+  `pip install` (or venv) step above.
+- `command not found: python3` → try `python` instead.
+- `Address already in use` on port 9000 → an old server is still running; stop
+  it (Ctrl-C in Terminal A) or use a different port: `python3 mock_robot.py --port 9001`
+  (and change `9000` to `9001` in the curl commands).
+- `nmap: command not found` → that step is optional; use the `curl` / `ss` lines instead.
 
 ## Write it up
 
