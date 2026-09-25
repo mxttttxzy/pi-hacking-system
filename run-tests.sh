@@ -55,7 +55,15 @@ python3 mock_robot.py --port 9199 >/dev/null 2>&1 &
 pid=$!
 resp="$(curl -s --retry-connrefused --retry 15 --retry-delay 1 "http://127.0.0.1:9199/cmd?move=left")"
 echo "$resp" | grep -q '"ok":true' \
-  && pass "mock_robot: command accepted over HTTP" || bad "mock_robot: command accepted over HTTP"
+  && pass "mock_robot: insecure command accepted over HTTP" || bad "mock_robot: insecure command accepted over HTTP"
+kill "$pid" 2>/dev/null || true
+
+# Defended mode: a replay with no token must be rejected (403).
+python3 mock_robot.py --port 9200 --token testtok >/dev/null 2>&1 &
+pid=$!
+code="$(curl -s -o /dev/null -w '%{http_code}' --retry-connrefused --retry 15 --retry-delay 1 "http://127.0.0.1:9200/cmd?move=left")"
+[[ "$code" == "403" ]] \
+  && pass "mock_robot: defended mode rejects tokenless replay (403)" || bad "mock_robot: defended mode rejects tokenless replay (got $code)"
 kill "$pid" 2>/dev/null || true
 
 echo

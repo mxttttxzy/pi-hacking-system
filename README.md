@@ -44,6 +44,7 @@ python3 adversarial_webcam.py            # or:  --image some.jpg
 | --- | --- |
 | **README.md** | This file. |
 | **requirements.txt** | Python deps for the demos. |
+| **docs/session-01.md** | Step-by-step first lab session (recon → intercept → replay → defend). |
 | **start-now.md** | The week-1 plan you can do without the robots. |
 | **attack-playbook.md** | How to select, hack, and take control of a target — with fixes. |
 | **practice-on-windows.md** | Run a real vulnerable target locally on Windows. |
@@ -53,7 +54,7 @@ python3 adversarial_webcam.py            # or:  --image some.jpg
 | `run-recon.sh` | From the laptop: scan the lab and run the report. |
 | `ai_report.py` | Turn an nmap scan into findings (local AI, or offline rules). |
 | `sample_scan.txt` | Example scan so `ai_report.py` runs today. |
-| `mock_robot.py` | Deliberately-insecure stand-in for a SunFounder robot. |
+| `mock_robot.py` | Deliberately-insecure stand-in for a SunFounder robot (`--token` shows the fix). |
 | `prompt_inject_demo.py` | Prompt-injection attack **and** the defence. |
 | `adversarial_patch_demo.py` | Real FGSM attack that fools an image classifier. |
 | `adversarial_webcam.py` | The same attack live on a webcam (or a still image). |
