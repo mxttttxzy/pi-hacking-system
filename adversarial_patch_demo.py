@@ -43,7 +43,8 @@ def make_dataset(n=400):
         else:                                      # GO: bottom rows a little brighter
             img[-16:] += RNG.uniform(0.12, 0.22)
             label = 1
-        X.append(np.clip(img, 0, 1)); y.append(label)
+        X.append(np.clip(img, 0, 1))
+        y.append(label)
     return np.array(X), np.array(y)
 
 
@@ -53,12 +54,14 @@ def sigmoid(z):
 
 def train(X, y, epochs=400, lr=0.5):
     """Plain logistic regression in numpy. Returns weights w, bias b."""
-    w = np.zeros(N); b = 0.0
+    w = np.zeros(N)
+    b = 0.0
     for _ in range(epochs):
         p = sigmoid(X @ w + b)
         grad_w = X.T @ (p - y) / len(y)
         grad_b = float(np.mean(p - y))
-        w -= lr * grad_w; b -= lr * grad_b
+        w -= lr * grad_w
+        b -= lr * grad_b
     return w, b
 
 

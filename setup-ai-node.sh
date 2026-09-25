@@ -17,10 +17,16 @@ source ./lab-config.sh
 if [[ $EUID -ne 0 ]]; then echo "Please run with sudo."; exit 1; fi
 
 echo ">> Setting the AI node's static IP to $IP_AI"
-CON="$(nmcli -t -f NAME connection show --active | head -n1)"
-if [[ -n "$CON" ]]; then
-  nmcli connection modify "$CON" \
-    ipv4.method manual ipv4.addresses "$IP_AI/$LAB_PREFIX" ipv4.gateway "" ipv4.dns ""
+if command -v nmcli >/dev/null 2>&1; then
+  CON="$(nmcli -t -f NAME connection show --active | head -n1)"
+  if [[ -n "$CON" ]]; then
+    nmcli connection modify "$CON" \
+      ipv4.method manual ipv4.addresses "$IP_AI/$LAB_PREFIX" ipv4.gateway "" ipv4.dns ""
+  else
+    echo "!! No active NetworkManager connection found. Set the IP manually to $IP_AI/$LAB_PREFIX."
+  fi
+else
+  echo "!! nmcli not found; set the IP manually to $IP_AI/$LAB_PREFIX, then continue."
 fi
 
 echo ">> Installing Ollama (needs internet for this step)..."

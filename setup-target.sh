@@ -33,16 +33,21 @@ echo ">> Configuring Pi #[$ROLE] with static IP $IP"
 
 # --- 1. Static IP via NetworkManager (Raspberry Pi OS Bookworm and newer) ---
 # Leaves the gateway blank on purpose, so the Pi has no route to the internet.
-CON="$(nmcli -t -f NAME connection show --active | head -n1)"
-if [[ -n "$CON" ]]; then
-  nmcli connection modify "$CON" \
-    ipv4.method manual \
-    ipv4.addresses "$IP/$LAB_PREFIX" \
-    ipv4.gateway "" \
-    ipv4.dns ""
-  echo ">> Static IP set on connection '$CON'. It applies on next network restart."
+if command -v nmcli >/dev/null 2>&1; then
+  CON="$(nmcli -t -f NAME connection show --active | head -n1)"
+  if [[ -n "$CON" ]]; then
+    nmcli connection modify "$CON" \
+      ipv4.method manual \
+      ipv4.addresses "$IP/$LAB_PREFIX" \
+      ipv4.gateway "" \
+      ipv4.dns ""
+    echo ">> Static IP set on connection '$CON'. It applies on next network restart."
+  else
+    echo "!! No active NetworkManager connection found. Set the IP manually to $IP/$LAB_PREFIX."
+  fi
 else
-  echo "!! No active NetworkManager connection found. Set the IP manually to $IP/$LAB_PREFIX."
+  echo "!! nmcli not found (this script assumes Raspberry Pi OS Bookworm+)."
+  echo "   Set the IP manually to $IP/$LAB_PREFIX, then continue."
 fi
 
 # --- 2. Docker (pull images while the Pi still has internet, THEN isolate) ---
@@ -63,7 +68,14 @@ case "$ROLE" in
     ;;
   service)
     # Deliberately weak SSH: restore the default account + password for practice.
-    echo "pi:raspberry" | chpasswd
+    # Recent Raspberry Pi OS images no longer create a 'pi' user, so guard it.
+    if id pi >/dev/null 2>&1; then
+      echo "pi:raspberry" | chpasswd
+      echo ">> Reset 'pi' password to 'raspberry' (weak, for practice)"
+    else
+      echo "!! No 'pi' user on this system; skipping the default-password step."
+      echo "   Create one first if you want it:  sudo useradd -m pi && echo 'pi:raspberry' | sudo chpasswd"
+    fi
     systemctl enable --now ssh
     # Anonymous, plaintext FTP for practice.
     apt-get update && apt-get install -y vsftpd

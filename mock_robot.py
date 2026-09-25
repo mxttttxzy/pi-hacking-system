@@ -26,7 +26,13 @@ Only Flask is required:  pip install flask
 """
 
 import argparse
-from flask import Flask, request
+import sys
+
+try:
+    from flask import Flask, request
+except ImportError:
+    print("This mock target needs Flask:  pip install flask", file=sys.stderr)
+    sys.exit(1)
 
 app = Flask(__name__)
 STATE = {"move": "stop", "commands_received": 0, "log": []}

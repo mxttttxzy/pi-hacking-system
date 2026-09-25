@@ -12,6 +12,9 @@ set -euo pipefail
 cd "$(dirname "$0")"
 source ./lab-config.sh
 
+command -v nmap >/dev/null 2>&1 || {
+  echo "nmap is required. Install it first, e.g.  sudo apt install nmap"; exit 1; }
+
 OUT="scan_results.txt"
 
 echo ">> Phase 1 — discovery on $LAB_SUBNET"
