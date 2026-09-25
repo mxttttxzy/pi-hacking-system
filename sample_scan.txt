@@ -1,0 +1,21 @@
+Starting Nmap 7.94 ( https://nmap.org ) at 2026-09-25 10:14 NZST
+Nmap scan report for 192.168.50.11
+Host is up (0.00042s latency).
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 8.4p1 Debian
+80/tcp   open  http    nginx 1.18.0
+3000/tcp open  http    Node.js Express framework
+
+Nmap scan report for 192.168.50.12
+Host is up (0.00051s latency).
+PORT   STATE SERVICE VERSION
+21/tcp open  ftp     vsftpd 3.0.3
+22/tcp open  ssh     OpenSSH 8.4p1 Debian
+
+Nmap scan report for 192.168.50.13
+Host is up (0.00048s latency).
+PORT    STATE SERVICE       VERSION
+80/tcp  open  http          Apache httpd 2.4.38
+445/tcp open  microsoft-ds  Samba smbd 4.9.5
+
+Nmap done: 3 IP addresses (3 hosts up) scanned in 4.21 seconds

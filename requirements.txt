@@ -1,0 +1,13 @@
+# Python dependencies for the lab demos.
+#   pip install -r requirements.txt
+#
+# ai_report.py and prompt_inject_demo.py use only the standard library
+# (they talk to a local Ollama model over HTTP if one is running).
+
+flask>=3.0        # mock_robot.py — the insecure practice target
+numpy>=1.24       # adversarial_patch_demo.py — the FGSM attack
+pillow>=10.0      # adversarial_patch_demo.py — saves before/after PNGs (optional)
+
+# Optional, not pip-installable — install separately if you want the AI demos
+# to use a real local model instead of the built-in fallbacks:
+#   Ollama:  https://ollama.com  ->  ollama pull llama3.2:1b
