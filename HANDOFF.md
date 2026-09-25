@@ -53,11 +53,26 @@ see `docs/session-01.md`.
 - Advisor slide deck: https://claude.ai/artifact/NrHLX9484f6NFfDAN4ubHL
 - A tech-exhibit sheet was also filled out and delivered as a file.
 
+## Lab-day preparation (done — ready for the Pis)
+
+All the tooling for the live run is written and self-tested:
+
+- `docs/session-02.md` — web attack lab (SQL-injection login bypass + sqlmap dump
+  + parameterised-query fix).
+- `docs/session-03.md` — AI-era demos on hardware (prompt injection + adversarial
+  patch/webcam), each with its defence.
+- `preflight.sh` — laptop-side readiness check: attacker tools, Python deps,
+  isolation sanity, every Pi reachable, expected ports per role, Ollama on the AI
+  node. Prints `READY` / `NOT READY`.
+- `docs/demo-day-runbook.md` — the single go-live page: provision → isolate →
+  pre-flight → run the four stations → teardown.
+
 ## What's next (open work)
 
-1. `docs/session-02.md` — the web attack: run OWASP Juice Shop, land one SQL
-   injection, then the fix.
-2. Wire the AI demos to real hardware for demo day (webcam + a local Ollama model).
+1. Run it against the real Pis: follow `docs/demo-day-runbook.md` once the
+   hardware arrives (`./preflight.sh` must print `READY` first).
+2. Wire the AI demos to real hardware for demo day (webcam + the AI-node Ollama
+   model / Hailo HAT+ acceleration).
 3. Optional: a project write-up (design → build → evaluation) in `docs/`.
 
 ## Where things live

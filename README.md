@@ -45,6 +45,9 @@ python3 adversarial_webcam.py            # or:  --image some.jpg
 | **README.md** | This file. |
 | **requirements.txt** | Python deps for the demos. |
 | **docs/session-01.md** | Step-by-step first lab session (recon → intercept → replay → defend). |
+| **docs/session-02.md** | Web attack: SQL-injection login bypass + data dump, then the fix. |
+| **docs/session-03.md** | AI-era attacks: prompt injection + adversarial patch, both defended. |
+| **docs/demo-day-runbook.md** | The single go-live page: provision → isolate → pre-flight → run → teardown. |
 | **start-now.md** | The week-1 plan you can do without the robots. |
 | **attack-playbook.md** | How to select, hack, and take control of a target — with fixes. |
 | **practice-on-windows.md** | Run a real vulnerable target locally on Windows. |
@@ -52,6 +55,7 @@ python3 adversarial_webcam.py            # or:  --image some.jpg
 | `setup-target.sh` | On each target Pi: static IP + Docker + vulnerable software. |
 | `setup-ai-node.sh` | On the AI HAT+ Pi: install Ollama + a small local model. |
 | `run-recon.sh` | From the laptop: scan the lab and run the report. |
+| `preflight.sh` | From the laptop: check the live lab is wired up (tools, targets, ports) before you start. |
 | `ai_report.py` | Turn an nmap scan into findings (local AI, or offline rules). |
 | `sample_scan.txt` | Example scan so `ai_report.py` runs today. |
 | `mock_robot.py` | Deliberately-insecure stand-in for a SunFounder robot (`--token` shows the fix). |
@@ -72,7 +76,10 @@ Laptop (attacker) --> isolated switch --> Pi #1 · Pi #2 · Pi #3 · AI HAT+   (
 2. On each target Pi (while it still has internet): `sudo ./setup-target.sh web` (then `service`, `network`).
 3. On the AI Pi: `sudo ./setup-ai-node.sh`.
 4. Unplug from the internet, move everything to the isolated switch.
-5. From the laptop: `./run-recon.sh`.
+5. From the laptop: `./preflight.sh` — confirm the lab is wired up (must print `READY`).
+6. From the laptop: `./run-recon.sh`, then work through Sessions 01–03.
+
+Full day-of checklist: **`docs/demo-day-runbook.md`**.
 
 ## Make the scripts executable
 

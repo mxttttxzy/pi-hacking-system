@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+.venv/
+venv/
 sign_clean.png
 sign_adversarial.png
 scan_results.txt
