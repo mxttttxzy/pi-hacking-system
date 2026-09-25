@@ -7,6 +7,7 @@
 flask>=3.0        # mock_robot.py — the insecure practice target
 numpy>=1.24       # adversarial_patch_demo.py — the FGSM attack
 pillow>=10.0      # adversarial_patch_demo.py — saves before/after PNGs (optional)
+opencv-python>=4.8  # adversarial_webcam.py — webcam demo (headless build works on a server)
 
 # Optional, not pip-installable — install separately if you want the AI demos
 # to use a real local model instead of the built-in fallbacks:

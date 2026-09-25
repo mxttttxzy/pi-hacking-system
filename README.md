@@ -30,6 +30,12 @@ python3 prompt_inject_demo.py
 
 # 4. Adversarial patch that flips STOP -> GO on a classifier
 python3 adversarial_patch_demo.py
+
+# 5. The same attack live on your webcam (needs a camera + opencv)
+python3 adversarial_webcam.py            # or:  --image some.jpg
+
+# Verify the whole toolkit at once
+./run-tests.sh
 ```
 
 ## What's in here
@@ -50,6 +56,8 @@ python3 adversarial_patch_demo.py
 | `mock_robot.py` | Deliberately-insecure stand-in for a SunFounder robot. |
 | `prompt_inject_demo.py` | Prompt-injection attack **and** the defence. |
 | `adversarial_patch_demo.py` | Real FGSM attack that fools an image classifier. |
+| `adversarial_webcam.py` | The same attack live on a webcam (or a still image). |
+| `run-tests.sh` | Smoke-test everything (linters + every demo). |
 
 ## The lab, in one line
 
